@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create build directory
-    - run: mkdir ./build    
+      run: mkdir ./build    
     - name: Build
       run: cmake --build ./build --target quickjs
