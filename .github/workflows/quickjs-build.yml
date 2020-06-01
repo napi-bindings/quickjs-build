@@ -1,23 +1,23 @@
-name: C/C++ CI
+name: QuickJS Build Matrix
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+       config: 
+         - { name: "Windows", os: "windows-latest", artifact: "windows.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 20.04", os: "ubuntu-20.04", artifact: "ubuntu-20_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 18.04", os: "ubuntu-18.04", artifact: "ubuntu-18_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 16.04", os: "ubuntu-16.04", artifact: "ubuntu-16_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "macOS", os: "macos-latest", artifact: "macOS.7z", cc: "clang", cxx: "clang++", archiver: "7z a" }  
     steps:
     - uses: actions/checkout@v2
-    - name: Create build directory
-      run: mkdir ./build    
-    - name: Launch CMake
-      run: cd ./build && cmake ..
-    - name: Build
-      run: cd ./build && make
-    - name: List files
-      run: ls  
+    - name: Print environment
+      run: |
+        echo github.event.action: ${{github.event.action}}
+        echo github.event_name: $${{github.event_name}} 
