@@ -10,11 +10,11 @@ jobs:
       fail-fast: false
       matrix:
        config: 
-         - { name: "Windows", os: "windows-latest", artifact: "windows.7z", cc: "gcc", cxx: "g++", archiver: "7z a", generator: "ninja" }
-         - { name: "Ubuntu 20.04", os: "ubuntu-20.04", artifact: "ubuntu-20_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a", generator: "ninja" }
-         - { name: "Ubuntu 18.04", os: "ubuntu-18.04", artifact: "ubuntu-18_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a", generator: "ninja" }
-         - { name: "Ubuntu 16.04", os: "ubuntu-16.04", artifact: "ubuntu-16_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a", generator: "ninja" }
-         - { name: "macOS", os: "macos-latest", artifact: "macOS.7z", cc: "clang", cxx: "clang++", archiver: "7z a", generator: "ninja" }  
+         - { name: "Windows", os: "windows-latest", artifact: "windows.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 20.04", os: "ubuntu-20.04", artifact: "ubuntu-20_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 18.04", os: "ubuntu-18.04", artifact: "ubuntu-18_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "Ubuntu 16.04", os: "ubuntu-16.04", artifact: "ubuntu-16_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { name: "macOS", os: "macos-latest", artifact: "macOS.7z", cc: "clang", cxx: "clang++", archiver: "7z a" }  
     steps:
     - uses: actions/checkout@v2
     - name: Print environment
