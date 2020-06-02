@@ -20,10 +20,10 @@ jobs:
     - name: Print environment
       run: |
         echo "Name: ${{ matrix.config.name }}"
-        echo OS: ${{ matrix.config.os }}
-        echo Artifact: ${{ matrix.config.artifact }}
-        echo C compiler: ${{ matrix.config.cc }}
-        echo C++ compiler: ${{ matrix.config.cxx }}
-        echo Generator: ${{ matrix.config.generator }}
-        echo Archiver: ${{ matrix.config.archiver }}
-        echo Artifact: ${{ matrix.config.artifact }}
+        echo "OS: ${{ matrix.config.os }}"
+        echo "Artifact: ${{ matrix.config.artifact }}"
+        echo "C compiler: ${{ matrix.config.cc }}"
+        echo "C++ compiler: ${{ matrix.config.cxx }}"
+        echo "Generator: ${{ matrix.config.generator }}"
+        echo "Archiver: ${{ matrix.config.archiver }}"
+        echo "Artifact: ${{ matrix.config.artifact }}"
