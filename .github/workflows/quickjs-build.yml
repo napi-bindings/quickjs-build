@@ -13,7 +13,9 @@ jobs:
          - { 
              name: "Windows", 
              os: "windows-latest", 
-             artifact: "windows.7z", 
+             artifact: "windows.7z",
+             build_type: "Release",
+             generator: "CodeBlocks - Unix Makefiles",
              cc: "gcc", 
              cxx: "g++", 
              archiver: "7z a" 
@@ -21,7 +23,9 @@ jobs:
          - { 
              name: "Ubuntu 20.04", 
              os: "ubuntu-20.04", 
-             artifact: "ubuntu-20_04.7z", 
+             artifact: "ubuntu-20_04.7z",
+             build_type: "Release",
+             generator: "Unix Makefiles",
              cc: "gcc", 
              cxx: "g++", 
              archiver: "7z a" 
@@ -29,7 +33,9 @@ jobs:
          - { 
              name: "Ubuntu 18.04", 
              os: "ubuntu-18.04", 
-             artifact: "ubuntu-18_04.7z", 
+             artifact: "ubuntu-18_04.7z",
+             build_type: "Release",
+             generator: "Unix Makefiles",
              cc: "gcc", 
              cxx: "g++", 
              archiver: "7z a" 
@@ -37,7 +43,9 @@ jobs:
          - { 
              name: "Ubuntu 16.04", 
              os: "ubuntu-16.04", 
-             artifact: "ubuntu-16_04.7z", 
+             artifact: "ubuntu-16_04.7z",
+             build_type: "Release",
+             generator: "Unix Makefiles",
              cc: "gcc", 
              cxx: "g++", 
              archiver: "7z a" 
@@ -45,7 +53,9 @@ jobs:
          - { 
              name: "macOS", 
              os: "macos-latest", 
-             artifact: "macOS.7z", 
+             artifact: "macOS.7z",
+             build_type: "Release",
+             generator: "Unix Makefiles",
              cc: "clang", 
              cxx: "clang++", 
              archiver: "7z a" 
@@ -87,4 +97,26 @@ jobs:
         brew install p7zip cmake
         cmake --version
         make --version
+    - name: Configure
+      shell: bash
+      run: |
+        mkdir build
+        mkdir qjs
+        cmake \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          -DCMAKE_INSTALL_PREFIX:PATH=instdir \
+          -G "${{ matrix.config.generator }}" \
+          -S ./ \
+          -B ./build
+    - name: Build
+      shell: bash
+      run: cmake --build ./build --config ${{ matrix.config.build_type }}
+    - name: "Prepare"
+      shell: bash
+      run: |
+        cp ./build/libqjs.a ./qjs/libqjs.a
+        cp -R ./include ./qjs/include
+
+
+
 
