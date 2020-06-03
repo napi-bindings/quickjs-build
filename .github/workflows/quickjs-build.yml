@@ -70,6 +70,12 @@ jobs:
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
         echo "Install for Linux ..."
+        sudo apt-get update
+        sudo apt-get install build-essential -y
+        sudo apt-get install cmake -y
+        gcc --version
+        cmake --version
+        make --version
     - name: Install dependencies on macOS
       if: startsWith(matrix.config.os, 'macos')
       run: |
