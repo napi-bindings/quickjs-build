@@ -117,6 +117,7 @@ jobs:
       run: |
         cp ./build/libqjs.a ./qjs/libqjs.a
         cp -R ./include ./qjs/include
+        cd ./qjs
         ls -laR
         ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} .
 
