@@ -10,7 +10,14 @@ jobs:
       fail-fast: false
       matrix:
        config: 
-         - { name: "Windows", os: "windows-latest", artifact: "windows.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
+         - { 
+             name: "Windows", 
+             os: "windows-latest", 
+             artifact: "windows.7z", 
+             cc: "gcc", 
+             cxx: "g++", 
+             archiver: "7z a" 
+           }
          - { name: "Ubuntu 20.04", os: "ubuntu-20.04", artifact: "ubuntu-20_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
          - { name: "Ubuntu 18.04", os: "ubuntu-18.04", artifact: "ubuntu-18_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
          - { name: "Ubuntu 16.04", os: "ubuntu-16.04", artifact: "ubuntu-16_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
