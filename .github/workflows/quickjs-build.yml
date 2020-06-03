@@ -69,6 +69,7 @@ jobs:
         choco install cmake
         cmake --version
         gcc --version
+        make --version
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
@@ -83,3 +84,7 @@ jobs:
       if: startsWith(matrix.config.os, 'macos')
       run: |
         echo "Install for macOs ..."
+        brew install p7zip cmake
+        cmake --version
+        make --version
+
