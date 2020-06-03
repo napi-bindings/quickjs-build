@@ -119,7 +119,12 @@ jobs:
         cp -R ./include ./qjs/include
         cd ./qjs
         ls -laR
-        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} .
+        ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }} .
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: ./${{ matrix.config.artifact }}
+        name: ${{ matrix.config.artifact }} 
 
 
 
