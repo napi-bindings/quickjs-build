@@ -10,16 +10,16 @@ jobs:
       fail-fast: false
       matrix:
        config: 
-         - { 
-             name: "Windows", 
-             os: "windows-latest", 
-             artifact: "qjs-windows.7z",
-             build_type: "Release",
-             generator: "CodeBlocks - Unix Makefiles",
-             cc: "gcc", 
-             cxx: "g++", 
-             archiver: "7z a" 
-           }
+         #- { 
+         #    name: "Windows", 
+         #    os: "windows-latest", 
+         #    artifact: "qjs-windows.7z",
+         #    build_type: "Release",
+         #    generator: "CodeBlocks - Unix Makefiles",
+         #    cc: "gcc", 
+         #    cxx: "g++", 
+         #    archiver: "7z a" 
+         #  }
          - { 
              name: "Ubuntu 20.04", 
              os: "ubuntu-20.04", 
@@ -53,7 +53,7 @@ jobs:
          - { 
              name: "macOS", 
              os: "macos-latest", 
-             artifact: "macOS.7z",
+             artifact: "qjs-macOS.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
              cc: "clang", 
