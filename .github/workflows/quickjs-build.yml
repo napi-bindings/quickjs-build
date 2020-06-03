@@ -18,10 +18,38 @@ jobs:
              cxx: "g++", 
              archiver: "7z a" 
            }
-         - { name: "Ubuntu 20.04", os: "ubuntu-20.04", artifact: "ubuntu-20_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
-         - { name: "Ubuntu 18.04", os: "ubuntu-18.04", artifact: "ubuntu-18_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
-         - { name: "Ubuntu 16.04", os: "ubuntu-16.04", artifact: "ubuntu-16_04.7z", cc: "gcc", cxx: "g++", archiver: "7z a" }
-         - { name: "macOS", os: "macos-latest", artifact: "macOS.7z", cc: "clang", cxx: "clang++", archiver: "7z a" }  
+         - { 
+             name: "Ubuntu 20.04", 
+             os: "ubuntu-20.04", 
+             artifact: "ubuntu-20_04.7z", 
+             cc: "gcc", 
+             cxx: "g++", 
+             archiver: "7z a" 
+           }
+         - { 
+             name: "Ubuntu 18.04", 
+             os: "ubuntu-18.04", 
+             artifact: "ubuntu-18_04.7z", 
+             cc: "gcc", 
+             cxx: "g++", 
+             archiver: "7z a" 
+           }
+         - { 
+             name: "Ubuntu 16.04", 
+             os: "ubuntu-16.04", 
+             artifact: "ubuntu-16_04.7z", 
+             cc: "gcc", 
+             cxx: "g++", 
+             archiver: "7z a" 
+           }
+         - { 
+             name: "macOS", 
+             os: "macos-latest", 
+             artifact: "macOS.7z", 
+             cc: "clang", 
+             cxx: "clang++", 
+             archiver: "7z a" 
+           }  
     steps:
     - uses: actions/checkout@v2
     - name: Print environment
@@ -34,3 +62,15 @@ jobs:
         echo "Generator: ${{ matrix.config.generator }}"
         echo "Archiver: ${{ matrix.config.archiver }}"
         echo "Artifact: ${{ matrix.config.artifact }}"
+    - name: Install dependencies on Windows
+      if: startsWith(matrix.config.os, 'windows')
+      run: |
+        echo "Install for winrdows ..."
+    - name: Install dependencies on Linux
+      if: startsWith(matrix.config.os, 'ubuntu')
+      run: |
+        echo "Install for Linux ..."
+    - name: Install dependencies on macOS
+      if: startsWith(matrix.config.os, 'macos')
+      run: |
+        echo "Install for macOs ..."
