@@ -124,7 +124,13 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: ./${{ matrix.config.artifact }}
-        name: ${{ matrix.config.artifact }} 
+        name: ${{ matrix.config.artifact }}
+    - name: Cleanup
+      shell: bash
+      run: |
+        rm -rf ./build
+        rm -rf ./qjs
+        rm -f ./${{ matrix.config.artifact }}
 
 
 
