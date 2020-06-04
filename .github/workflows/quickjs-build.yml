@@ -74,7 +74,7 @@ jobs:
         echo "Artifact: ${{ matrix.config.artifact }}"
     - name: Install dependencies on Windows
       if: startsWith(matrix.config.os, 'windows')
-      shell: bash
+      shell: cmake -P {0}
       run: |
         echo "Install for winrdows ..."
         file(DOWNLOAD "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip" SHOW_PROGRESS)
