@@ -77,9 +77,9 @@ jobs:
       shell: bash
       run: |
         echo "Install for winrdows ..."
-        set(gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip")
-        file(DOWNLOAD "${gcc_url}" SHOW_PROGRESS)
+        file(DOWNLOAD "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip" SHOW_PROGRESS)
         tar xvf ./v9.2.0.zip
+        ls -laR
         choco install cmake
         cmake --version
         gcc --version
