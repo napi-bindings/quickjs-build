@@ -76,10 +76,10 @@ jobs:
       if: startsWith(matrix.config.os, 'windows')
       run: |
         echo "Install for winrdows ..."
-        choco install cmake
-        set(tdb_gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip")
-        file(DOWNLOAD "${tdb_gcc_url}" SHOW_PROGRESS)
+        set(gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip")
+        file(DOWNLOAD "${gcc_url}" SHOW_PROGRESS)
         tar xvf ./v9.2.0.zip
+        choco install cmake
         cmake --version
         gcc --version
         make --version
