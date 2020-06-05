@@ -117,9 +117,9 @@ jobs:
         mkdir ./build
         mkdir ./qjs
         cmake \
-          -DCMAKE_MAKE_PROGRAM=/${{ matrix.config.compiler }}/bin/mingw32-make.exe \
-          -DCMAKE_C_COMPILER=/${{ matrix.config.compiler }}/bin/gcc.exe \
-          -DCMAKE_CXX_COMPILER=/${{ matrix.config.compiler }}/bin/g++.exe \
+          -DCMAKE_MAKE_PROGRAM=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/mingw32-make.exe \
+          -DCMAKE_C_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/gcc.exe \
+          -DCMAKE_CXX_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/g++.exe \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
           -DCMAKE_INSTALL_PREFIX:PATH=instdir \
           -G "${{ matrix.config.generator }}" \
