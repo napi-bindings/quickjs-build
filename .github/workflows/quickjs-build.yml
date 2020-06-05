@@ -108,6 +108,7 @@ jobs:
     - name: Configure
       shell: bash
       run: |
+        ls 
         mkdir ./build
         mkdir ./qjs
         cmake \
