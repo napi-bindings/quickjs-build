@@ -81,6 +81,8 @@ jobs:
         make --version
         choco install wget
         wget --version
+        choco install 7zip.install
+        7z
     - name: Install compiler on Windows
       if: startsWith(matrix.config.os, 'windows')
       shell: bash
