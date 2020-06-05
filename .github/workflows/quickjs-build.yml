@@ -119,7 +119,7 @@ jobs:
         mkdir ./build
         mkdir ./qjs
         cmake \
-          ${{ matrix.config.cmake_options }}
+          ${{ matrix.config.cmake_options }} \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
           -DCMAKE_INSTALL_PREFIX:PATH=instdir \
           -G "${{ matrix.config.generator }}" \
