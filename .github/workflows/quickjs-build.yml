@@ -79,6 +79,8 @@ jobs:
         choco install cmake
         cmake --version
         make --version
+        choco install wget
+        wget --version
     - name: Install compiler on Windows
       if: startsWith(matrix.config.os, 'windows')
       shell: bash
