@@ -16,8 +16,8 @@ jobs:
              artifact: "qjs-windows.7z",
              build_type: "Release",
              generator: "CodeBlocks - Unix Makefiles",
-             cc: "gcc", 
-             cxx: "g++",
+             #cc: "gcc", 
+             #cxx: "g++",
              cmake_options: "-DCMAKE_MAKE_PROGRAM=/tdm-gcc-9.2.0/bin/mingw32-make.exe -DCMAKE_C_COMPILER=/tdm-gcc-9.2.0/bin/gcc.exe -DCMAKE_CXX_COMPILER=/tdm-gcc-9.2.0/bin/g++.exe",
              archiver: "7z a" 
            }
@@ -27,8 +27,8 @@ jobs:
              artifact: "qjs-ubuntu-20_04.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cc: "gcc", 
-             cxx: "g++",
+             #cc: "gcc", 
+             #cxx: "g++",
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -38,8 +38,8 @@ jobs:
              artifact: "qjs-ubuntu-18_04.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cc: "gcc", 
-             cxx: "g++", 
+             #cc: "gcc", 
+             #cxx: "g++", 
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -49,8 +49,8 @@ jobs:
              artifact: "qjs-ubuntu-16_04.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cc: "gcc", 
-             cxx: "g++",
+             #cc: "gcc", 
+             #cxx: "g++",
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -60,8 +60,8 @@ jobs:
              artifact: "qjs-macOS.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cc: "clang", 
-             cxx: "clang++",
+             #cc: "clang", 
+             #cxx: "clang++",
              cmake_options: "",
              archiver: "7z a" 
            }  
