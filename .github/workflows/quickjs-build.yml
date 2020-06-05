@@ -16,9 +16,8 @@ jobs:
              artifact: "qjs-windows.7z",
              build_type: "Release",
              generator: "CodeBlocks - Unix Makefiles",
-             #cc: "gcc", 
-             #cxx: "g++",
-             cmake_options: "-DCMAKE_MAKE_PROGRAM=/tdm-gcc-9.2.0/bin/mingw32-make.exe -DCMAKE_C_COMPILER=/tdm-gcc-9.2.0/bin/gcc.exe -DCMAKE_CXX_COMPILER=/tdm-gcc-9.2.0/bin/g++.exe",
+             compiler: "tdm-gcc-9.2.0", 
+             cmake_options: "-DCMAKE_MAKE_PROGRAM=/${{ matrix.config.compiler }}/bin/mingw32-make.exe -DCMAKE_C_COMPILER=/${{ matrix.config.compiler }}/bin/gcc.exe -DCMAKE_CXX_COMPILER=/${{ matrix.config.compiler }}/bin/g++.exe",
              archiver: "7z a" 
            }
          - { 
@@ -27,8 +26,6 @@ jobs:
              artifact: "qjs-ubuntu-20_04.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             #cc: "gcc", 
-             #cxx: "g++",
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -37,9 +34,7 @@ jobs:
              os: "ubuntu-18.04", 
              artifact: "qjs-ubuntu-18_04.7z",
              build_type: "Release",
-             generator: "Unix Makefiles",
-             #cc: "gcc", 
-             #cxx: "g++", 
+             generator: "Unix Makefiles", 
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -49,8 +44,6 @@ jobs:
              artifact: "qjs-ubuntu-16_04.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             #cc: "gcc", 
-             #cxx: "g++",
              cmake_options: "",
              archiver: "7z a" 
            }
@@ -60,8 +53,6 @@ jobs:
              artifact: "qjs-macOS.7z",
              build_type: "Release",
              generator: "Unix Makefiles",
-             #cc: "clang", 
-             #cxx: "clang++",
              cmake_options: "",
              archiver: "7z a" 
            }  
@@ -94,8 +85,8 @@ jobs:
       run: |
         wget -O tdm-gcc.zip https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
         7z x tdm-gcc.zip -o/
-        ls -la /tdm-gcc-9.2.0
-        ls -la /tdm-gcc-9.2.0/bin
+        ls -la /${{ matrix.config.compiler }}
+        ls -la /${{ matrix.config.compiler }}/bin
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
