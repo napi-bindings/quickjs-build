@@ -88,7 +88,7 @@ jobs:
       shell: bash
       run: |
         wget -O tdm-gcc.zip https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
-        7z a x tdm-gcc.zip -o /tdm-gcc
+        7z x tdm-gcc.zip -o/tdm-gcc
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
