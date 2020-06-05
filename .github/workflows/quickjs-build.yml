@@ -49,7 +49,7 @@ jobs:
          - { 
              name: "macOS", 
              os: "macos-latest", 
-             artifact: "qjs-macOS.7z",
+             artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
              archiver: "7z" 
