@@ -74,16 +74,19 @@ jobs:
         echo "Artifact: ${{ matrix.config.artifact }}"
     - name: Install dependencies on Windows
       if: startsWith(matrix.config.os, 'windows')
-      shell: cmake -P {0}
       run: |
-        echo "Install for winrdows ..."
-        file(DOWNLOAD "https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip" SHOW_PROGRESS)
-        tar xvf ./v9.2.0.zip
-        ls -laR
+        echo "Install for windows ..."
         choco install cmake
         cmake --version
-        gcc --version
         make --version
+    - name: Install compiler on Windows
+      if: startsWith(matrix.config.os, 'windows')
+      shell: cmake -P {0}
+      run: |
+        set(tdb_gcc "v9.2.0.zip")
+        set(tdb_gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/${tdb_gcc}")
+        file(DOWNLOAD "${tdb_gcc_url}" SHOW_PROGRESS)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./${tdb_gcc})
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
