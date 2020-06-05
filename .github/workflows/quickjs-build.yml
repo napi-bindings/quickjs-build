@@ -86,7 +86,7 @@ jobs:
         set(tdb_gcc "v9.2.0.zip")
         set(tdb_gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/${tdb_gcc}")
         file(DOWNLOAD "${tdb_gcc_url}" "${tdb_gcc}")
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./${tdb_gcc})
+        execute_process(COMMAND -E tar xvf ./${tdb_gcc})
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
@@ -108,7 +108,9 @@ jobs:
     - name: Configure
       shell: bash
       run: |
-        ls 
+        ls
+        MY = pwd
+        echo $MY
         mkdir ./build
         mkdir ./qjs
         cmake \
