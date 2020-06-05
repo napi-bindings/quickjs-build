@@ -85,8 +85,8 @@ jobs:
       if: startsWith(matrix.config.os, 'windows')
       shell: bash
       run: |
-        wget https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
-        ls /
+        wget -O tdm-gcc.zip https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
+        7z a x tdm-gcc.zip -o /tdm-gcc
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
