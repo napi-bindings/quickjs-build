@@ -134,9 +134,7 @@ jobs:
         cp ./build/libqjs.a ./qjs/libqjs.a
         cp -R ./include ./qjs/include
         cd ./qjs
-        ls -laR
         ${{ matrix.config.archiver }} a -tzip ../${{ matrix.config.artifact }}.zip .
-        ls -laR
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
