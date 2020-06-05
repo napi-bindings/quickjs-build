@@ -94,6 +94,7 @@ jobs:
       run: |
         wget -O tdm-gcc.zip https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
         7z x tdm-gcc.zip -o/tdm-gcc
+        ls -la /tdm-gcc
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
@@ -115,7 +116,6 @@ jobs:
     - name: Configure
       shell: bash
       run: |
-        ls /
         mkdir ./build
         mkdir ./qjs
         cmake \
