@@ -136,6 +136,7 @@ jobs:
         cd ./qjs
         ls -laR
         ${{ matrix.config.archiver }} a ../${{ matrix.config.artifact }} .
+        ls .laR
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
