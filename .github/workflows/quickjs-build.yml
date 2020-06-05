@@ -81,12 +81,10 @@ jobs:
         make --version
     - name: Install compiler on Windows
       if: startsWith(matrix.config.os, 'windows')
-      shell: cmake -P {0}
+      shell: bash
       run: |
-        set(tdb_gcc "v9.2.0.zip")
-        set(tdb_gcc_url "https://github.com/napi-bindings/tdm-gcc/archive/${tdb_gcc}")
-        file(DOWNLOAD "${tdb_gcc_url}" "${tdb_gcc}")
-        execute_process(COMMAND -E tar xvf ./${tdb_gcc})
+        wget https://github.com/napi-bindings/tdm-gcc/archive/v9.2.0.zip
+        ls /
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
@@ -109,8 +107,6 @@ jobs:
       shell: bash
       run: |
         ls
-        MY = pwd
-        echo $MY
         mkdir ./build
         mkdir ./qjs
         cmake \
