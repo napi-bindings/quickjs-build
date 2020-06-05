@@ -17,7 +17,8 @@ jobs:
              build_type: "Release",
              generator: "CodeBlocks - Unix Makefiles",
              cc: "gcc", 
-             cxx: "g++", 
+             cxx: "g++",
+             cmake_options: "-DCMAKE_MAKE_PROGRAM=C:/tdm-gcc/bin/mingw32-make.exe -DCMAKE_C_COMPILER=C:/tdm-gcc/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/tdm-gcc/bin/g++.exe",
              archiver: "7z a" 
            }
          - { 
@@ -27,7 +28,8 @@ jobs:
              build_type: "Release",
              generator: "Unix Makefiles",
              cc: "gcc", 
-             cxx: "g++", 
+             cxx: "g++",
+             cmake_options: "",
              archiver: "7z a" 
            }
          - { 
@@ -38,6 +40,7 @@ jobs:
              generator: "Unix Makefiles",
              cc: "gcc", 
              cxx: "g++", 
+             cmake_options: "",
              archiver: "7z a" 
            }
          - { 
@@ -47,7 +50,8 @@ jobs:
              build_type: "Release",
              generator: "Unix Makefiles",
              cc: "gcc", 
-             cxx: "g++", 
+             cxx: "g++",
+             cmake_options: "",
              archiver: "7z a" 
            }
          - { 
@@ -57,7 +61,8 @@ jobs:
              build_type: "Release",
              generator: "Unix Makefiles",
              cc: "clang", 
-             cxx: "clang++", 
+             cxx: "clang++",
+             cmake_options: "",
              archiver: "7z a" 
            }  
     steps:
@@ -114,6 +119,7 @@ jobs:
         mkdir ./build
         mkdir ./qjs
         cmake \
+          ${{ matrix.config.cmake_options }}
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
           -DCMAKE_INSTALL_PREFIX:PATH=instdir \
           -G "${{ matrix.config.generator }}" \
