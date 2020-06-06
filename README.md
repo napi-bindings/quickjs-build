@@ -1,5 +1,7 @@
 # QuickJS JavaScript Engine
 
+![QuickJS Build Matrix](https://github.com/napi-bindings/quickjs-build/workflows/QuickJS%20Build%20Matrix/badge.svg?branch=master)
+
 ## Version 2020-04-12
 
 - [Introduction](#introduction)
