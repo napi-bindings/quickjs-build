@@ -18,11 +18,6 @@ else()
             -Wno-unused-but-set-variable)
 endif()
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-    list(APPEND qjs_cflags
-            -Wimplicit-function-declaration)
-endif()
-
 file(STRINGS "VERSION" QJS_VERSION_STR)
 
 add_library(qjs STATIC
