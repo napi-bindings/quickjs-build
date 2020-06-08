@@ -14,7 +14,7 @@
 
 ## Introduction
 
-QuickJS is a small and embeddable Javascript engine. It supports the **[ES2020](https://tc39.github.io/ecma262/)**
+**QuickJS** is a small and embeddable Javascript engine. It supports the **[ES2020](https://tc39.github.io/ecma262/)**
  specification including modules, asynchronous generators, proxies and BigInt.
 
 It optionally supports mathematical extensions such as big decimal floating point
@@ -43,9 +43,24 @@ deterministic behavior) with cycle removal.
 - Command line interpreter with contextual colorization implemented in Javascript.
 - Small built-in standard library with **C** library wrappers.
 
+This reposistory is a mrirror of the original work that you can find **[here](https://bellard.org/quickjs/)**.
+
 ## Building
 
----
+The main purpose of this reposistory is to build QuickJS static library that you
+could include on your C / C++ project. On release you can find the build for the 
+following operating systems:
+
+- Windows
+- Ubuntu 20.04
+- Ubuntu 18.04
+- Ubuntu 16.04
+- macOS
+
+If you want to build the QuickJS library on your own the first step is to clone 
+this repository:
+
+`> git clone https://bellard.org/quickjs/`
 
 ### Building on Windows
 
