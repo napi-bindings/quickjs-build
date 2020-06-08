@@ -14,9 +14,7 @@
 
 ## Introduction
 
-QuickJS is a small and embeddable Javascript engine. It supports the  
-[ES2020](https://tc39.github.io/ecma262/) specification including modules, 
-asynchronous generators, proxies and BigInt.
+QuickJS is a small and embeddable Javascript engine. It supports the **[ES2020](https://tc39.github.io/ecma262/)** specification including modules asynchronous generators, proxies and BigInt.
 
 It optionally supports mathematical extensions such as big decimal floating point
 numbers (BigDecimal), big binary floating point numbers (BigFloat) and operator 
@@ -27,20 +25,20 @@ overloading.
 - Small and easily embeddable: just a few **C** files, no external dependency, 
 **210 KiB** of x86 code for a simple hello world program.
 - Fast interpreter with very low startup time: runs the 69000 tests of the 
-[ECMAScript Test Suite](https://github.com/tc39/test262) in about 95 seconds on a
+**[ECMAScript Test Suite](https://github.com/tc39/test262)** in about 95 seconds on a
 single core of a desktop PC. The complete life cycle of a runtime instance 
 completes in less than 300 microseconds.
-- Almost complete [ES2020](https://tc39.github.io/ecma262/) support including 
+- Almost complete **[ES2020](https://tc39.github.io/ecma262/)** support including 
 modules, asynchronous generators and full Annex B support (legacy web 
 compatibility).
 - Passes nearly 100% of the 
-[ECMAScript Test Suite](https://github.com/tc39/test262) tests when selecting the 
+**[ECMAScript Test Suite](https://github.com/tc39/test262)** tests when selecting the 
 ES2020 features.
 - Can compile Javascript sources to executables with no external dependency.
 - Garbage collection using reference counting (to reduce memory usage and have 
 deterministic behavior) with cycle removal.
-- Mathematical extensions: **BigDecimal**, **BigFloat**, operator overloading, 
-bigint mode, math mode.
+- Mathematical extensions: **BigDecimal**, **BigFloat**, **operator overloading**, 
+**bigint mode**, **math mode**.
 - Command line interpreter with contextual colorization implemented in Javascript.
 - Small built-in standard library with **C** library wrappers.
 
