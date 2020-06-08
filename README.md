@@ -48,14 +48,14 @@ This reposistory is a mrirror of the original work that you can find **[here](ht
 ## Building
 
 The main purpose of this reposistory is to build QuickJS static library that you
-could include on your C / C++ project. On release you can find the build for the 
+could include on your **C / C++** project. On release you can find the build for the 
 following operating systems:
 
-- Windows
-- Ubuntu 20.04
-- Ubuntu 18.04
-- Ubuntu 16.04
-- macOS
+- **Windows**
+- **Ubuntu 20.04**
+- **Ubuntu 18.04**
+- **Ubuntu 16.04**
+- **macOS**
 
 If you want to build the QuickJS library on your own the first step is to clone 
 this repository:
@@ -64,9 +64,9 @@ this repository:
 
 ### Building on Windows
 
-You will need to install **GCC** for Windows and **CMake**
+You will need to install **GCC** for Windows and **CMake**.
 
-#### Install GCC
+#### Install GCC compiler
 
 - Download the right version for your system from this **[link](https://jmeubank.github.io/tdm-gcc/download/)**.
 - Be sure that **gcc** in in your path of execution.
@@ -100,15 +100,41 @@ cmake --build ./build
 
 ### Building on Unix-like platform
 
----
+You will need to install **C / C++** compiler and **CMake**.
 
 #### Prerequisistes to build on Linux
 
----
+These steps were tested on: 
+
+- **Ubuntu 16.04** 
+- **Ubuntu 18.04** 
+- **Ubuntu 20.04**
+
+First, you will need to install dependencies:
+
+```
+sudo apt-get update
+sudo apt-get install build-essential -y
+sudo apt-get install cmake -y
+```
 
 #### Prerequisites to build on macOS
 
----
+These steps were tested on macOS Catalina (10.15).
+
+First, you will need to install dependencies:
+
+- Install [Xcode](https://developer.apple.com/xcode/download/)
+   - You also need to install the `XCode Command Line Tools` by running 
+   `xcode-select --install`. Alternatively, if you already have the full Xcode 
+   installed, you can find them under the menu 
+   `Xcode -> Open Developer Tool -> More Developer Tools...`. This step will 
+   install `clang`, `clang++`, and `make`.
+- Install [Homebrew](https://brew.sh/)
+- Install and `cmake` running the following command:
+```
+brew install cmake
+```
 
 #### Configure and build
 
@@ -131,10 +157,10 @@ cmake --build ./build
 
 ## References
 
-- **QuickJS** documentation [HTML version](https://bellard.org/quickjs/quickjs.html), [PDF version](https://bellard.org/quickjs/quickjs.pdf)
-- Specification of the JavaScript **Bignum Extensions**: [HTML version](https://bellard.org/quickjs/jsbignum.html), [PDF version](https://bellard.org/quickjs/jsbignum.pdf)
-- [Writing native modules in C for QuickJS](https://medium.com/@calbertts/writing-native-modules-in-c-for-quickjs-engine-49043587f2e2)
-- [How to create asynchronous code for QuickJS](https://medium.com/@calbertts/how-to-create-asynchronous-apis-for-quickjs-8aca5488bb2e)
+- **QuickJS** documentation [HTML version](https://bellard.org/quickjs/quickjs.html), [PDF version](https://bellard.org/quickjs/quickjs.pdf).
+- Specification of the JavaScript **Bignum Extensions**: [HTML version](https://bellard.org/quickjs/jsbignum.html), [PDF version](https://bellard.org/quickjs/jsbignum.pdf).
+- [Writing native modules in C for QuickJS](https://medium.com/@calbertts/writing-native-modules-in-c-for-quickjs-engine-49043587f2e2).
+- [How to create asynchronous code for QuickJS](https://medium.com/@calbertts/how-to-create-asynchronous-apis-for-quickjs-8aca5488bb2e).
 
 ## Team
 
