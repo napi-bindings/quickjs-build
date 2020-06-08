@@ -14,7 +14,8 @@
 
 ## Introduction
 
-QuickJS is a small and embeddable Javascript engine. It supports the **[ES2020](https://tc39.github.io/ecma262/)** specification including modules asynchronous generators, proxies and BigInt.
+QuickJS is a small and embeddable Javascript engine. It supports the **[ES2020](https://tc39.github.io/ecma262/)**
+ specification including modules, asynchronous generators, proxies and BigInt.
 
 It optionally supports mathematical extensions such as big decimal floating point
 numbers (BigDecimal), big binary floating point numbers (BigFloat) and operator 
