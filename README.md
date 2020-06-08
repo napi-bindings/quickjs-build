@@ -110,13 +110,31 @@ cmake --build ./build
 
 ---
 
-### Build instructions
+#### Configure and build
 
----
+Open your shell and execute the commands reported below:
+
+```
+mkdir ./build
+cmake \
+-DCMAKE_BUILD_TYPE=Release \
+-G "Unix Makefiles" \
+-S ./ \
+-B ./build
+cmake --build ./build
+```
+
+`-DCMAKE_BUILD_TYPE` could be set with one of the following two values:
+
+- Release
+- Debug
 
 ## References
 
----
+- **QuickJS** documentation [HTML version](https://bellard.org/quickjs/quickjs.html), [PDF version](https://bellard.org/quickjs/quickjs.pdf)
+- Specification of the JavaScript **Bignum Extensions**: [HTML version](https://bellard.org/quickjs/jsbignum.html), [PDF version](https://bellard.org/quickjs/jsbignum.pdf)
+- [Writing native modules in C for QuickJS](https://medium.com/@calbertts/writing-native-modules-in-c-for-quickjs-engine-49043587f2e2)
+- [How to create asynchronous code for QuickJS](https://medium.com/@calbertts/how-to-create-asynchronous-apis-for-quickjs-8aca5488bb2e)
 
 ## Team
 
