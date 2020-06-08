@@ -106,7 +106,6 @@ jobs:
         mkdir ./qjs
         cmake \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-          -DCMAKE_INSTALL_PREFIX:PATH=instdir \
           -G "${{ matrix.config.generator }}" \
           -S ./ \
           -B ./build
@@ -121,7 +120,6 @@ jobs:
           -DCMAKE_C_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/gcc.exe \
           -DCMAKE_CXX_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/g++.exe \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-          -DCMAKE_INSTALL_PREFIX:PATH=instdir \
           -G "${{ matrix.config.generator }}" \
           -S ./ \
           -B ./build
