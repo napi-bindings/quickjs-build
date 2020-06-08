@@ -60,12 +60,44 @@ following operating systems:
 If you want to build the QuickJS library on your own the first step is to clone 
 this repository:
 
-`> git clone https://bellard.org/quickjs/`
+`> git clone https://github.com/napi-bindings/quickjs-build.git`
 
 ### Building on Windows
 
----
- 
+You will need to install **GCC** for Windows and **CMake**
+
+#### Install GCC
+
+- Download the right version for your system from this **[link](https://jmeubank.github.io/tdm-gcc/download/)**.
+- Be sure that **gcc** in in your path of execution.
+
+#### Install CMake
+
+- Download the right version for your system from this **[link](https://cmake.org/download/)**.
+- Be sure that **cmake** is in your path of execution.
+
+#### Configure and build
+
+Open your shell and execute the commands reported below:
+
+```
+mkdir ./build
+cmake \
+-DCMAKE_MAKE_PROGRAM=mingw32-make.exe \
+-DCMAKE_C_COMPILER=gcc.exe \
+-DCMAKE_CXX_COMPILER=g++.exe \
+-DCMAKE_BUILD_TYPE=Release \
+-G "CodeBlocks - Unix Makefiles" \
+-S ./ \
+-B ./build
+cmake --build ./build
+```
+
+`-DCMAKE_BUILD_TYPE` could be set with one of the following two values:
+
+- Release
+- Debug
+
 ### Building on Unix-like platform
 
 ---
