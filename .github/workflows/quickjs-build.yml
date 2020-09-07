@@ -139,12 +139,12 @@ jobs:
         path: ./${{ matrix.config.artifact }}.zip
         name: ${{ matrix.config.artifact }}
     - name: Release
-      if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
+      if: github.event_name == 'release' && (github.event.action == 'published')
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./${{ matrix.config.artifact }}.zip
-          asset_name: ${{ matrix.config.artifact }}
+          asset_name: ${{ matrix.config.artifact }}.zip
           asset_content_type: application/zip
