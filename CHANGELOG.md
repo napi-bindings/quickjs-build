@@ -1,5 +1,12 @@
 # quickjs-build changelog
 
+## 2020-11-08 Version 4.0.0, @NickNaso
+
+- improved function parameter initializers
+- added `std.setenv()`, `std.unsetenv()` and `std.getenviron()`
+- added JS_EvalThis()
+- misc bug fixes
+
 ## 2020-09-10 Version 3.0.0, @NickNaso
 
 - added logical assignment operators
