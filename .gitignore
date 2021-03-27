@@ -12,3 +12,4 @@ _deps
 .vscode
 .idea
 build
+.DS_Store

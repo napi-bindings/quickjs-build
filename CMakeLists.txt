@@ -26,6 +26,7 @@ add_library(qjs STATIC
         src/libregexp.c
         src/libunicode.c
         src/quickjs.c
+        src/quickjs-libc.c
         )
 set_target_properties(qjs PROPERTIES
         C_STANDARD 11

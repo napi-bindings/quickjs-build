@@ -2,7 +2,7 @@
 
 ![QuickJS Build Matrix](https://github.com/napi-bindings/quickjs-build/workflows/QuickJS%20Build%20Matrix/badge.svg?branch=master)
 
-## Version 2020-11-08
+## Version 2021-03-27
 
 - [Introduction](#introduction)
 - [Building](#building)
