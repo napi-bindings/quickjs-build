@@ -1,5 +1,12 @@
 # quickjs-build changelog
 
+## 2021-03-28 Version 5.0.0, @NickNaso
+
+- faster Array.prototype.push and Array.prototype.unshift
+- added JS_UpdateStackTop()
+- fixed Windows console
+- misc bug fixes
+
 ## 2020-11-08 Version 4.0.0, @NickNaso
 
 - improved function parameter initializers
