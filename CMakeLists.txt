@@ -36,7 +36,7 @@ target_compile_options(qjs PRIVATE ${qjs_cflags})
 target_compile_definitions(qjs PUBLIC
         QJS_VERSION_STR="${QJS_VERSION_STR}"
         )
-target_compile_definitions(qjs PRIVATE
+target_compile_definitions(qjs PUBLIC
         CONFIG_BIGNUM
         CONFIG_VERSION="${QJS_VERSION_STR}"
         )
@@ -51,3 +51,13 @@ target_include_directories(qjs PRIVATE src)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_link_libraries(qjs atomic)
 endif()
+
+if (UNIX)
+    target_link_libraries(qjs PRIVATE m dl pthread)
+endif()
+
+add_executable(qjsc src/qjsc.c)
+target_link_libraries(qjsc PUBLIC qjs)
+
+add_executable(quickjs src/qjs.c src/qjscalc.c src/repl.c)
+target_link_libraries(quickjs PUBLIC qjs)
