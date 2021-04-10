@@ -15,11 +15,7 @@ jobs:
              os: "windows-latest", 
              artifact: "qjs-windows",
              build_type: "Release",
-             generator: "CodeBlocks - Unix Makefiles",
-             compiler: {
-               name: "tdm-gcc",
-               version: "9.2.0"
-             },
+             generator: "MinGW Makefiles",
              archiver: "7z" 
            }
          - { 
@@ -67,19 +63,8 @@ jobs:
       if: startsWith(matrix.config.os, 'windows')
       run: |
         echo "Install for windows ..."
-        choco install cmake
         cmake --version
-        make --version
-        choco install wget
-        wget --version
-        choco install 7zip.install
         ${{ matrix.config.archiver }}
-    - name: Install compiler on Windows
-      if: startsWith(matrix.config.os, 'windows')
-      shell: bash
-      run: |
-        wget -O ${{ matrix.config.compiler.name }}.zip https://github.com/napi-bindings/tdm-gcc/archive/v${{ matrix.config.compiler.version }}.zip
-        ${{ matrix.config.archiver }} x tdm-gcc.zip -o/
     - name: Install dependencies on Linux
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
@@ -103,7 +88,6 @@ jobs:
       shell: bash
       run: |
         mkdir ./build
-        mkdir ./qjs
         cmake \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
           -G "${{ matrix.config.generator }}" \
@@ -111,25 +95,21 @@ jobs:
           -B ./build
     - name: Configure on Windows
       if: startsWith(matrix.config.os, 'windows')
-      shell: bash
+      shell: cmd
       run: |
         mkdir ./build
-        mkdir ./qjs
-        cmake \
-          -DCMAKE_MAKE_PROGRAM=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/mingw32-make.exe \
-          -DCMAKE_C_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/gcc.exe \
-          -DCMAKE_CXX_COMPILER=/${{ matrix.config.compiler.name }}-${{ matrix.config.compiler.version }}/bin/g++.exe \
-          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-          -G "${{ matrix.config.generator }}" \
-          -S ./ \
-          -B ./build
+        set PATH=C:\msys64\mingw64\bin
+        cmake -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -S ./ -B ./build
     - name: Build
       shell: bash
       run: cmake --build ./build --config ${{ matrix.config.build_type }}
     - name: "Prepare"
       shell: bash
       run: |
+        mkdir ./qjs
         cp ./build/libqjs.a ./qjs/libqjs.a
+        cp ./build/qjsc ./qjs/qjsc
+        cp ./build/quickjs ./qjs/quickjs
         cp -R ./include ./qjs/include
         cd ./qjs
         ${{ matrix.config.archiver }} a -tzip ../${{ matrix.config.artifact }}.zip .

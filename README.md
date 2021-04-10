@@ -68,7 +68,7 @@ You will need to install **GCC** for Windows and **CMake**.
 
 #### Install GCC compiler
 
-- Download the right version for your system from this **[link](https://jmeubank.github.io/tdm-gcc/download/)**.
+- Download the mingw from this **[link](https://sourceforge.net/projects/mingw-w64/)**.
 - Be sure that **gcc** in in your path of execution.
 
 #### Install CMake
@@ -83,11 +83,8 @@ Open your shell and execute the commands reported below:
 ```
 mkdir ./build
 cmake \
--DCMAKE_MAKE_PROGRAM=mingw32-make.exe \
--DCMAKE_C_COMPILER=gcc.exe \
--DCMAKE_CXX_COMPILER=g++.exe \
 -DCMAKE_BUILD_TYPE=Release \
--G "CodeBlocks - Unix Makefiles" \
+-G "MinGW Makefiles" \
 -S ./ \
 -B ./build
 cmake --build ./build
