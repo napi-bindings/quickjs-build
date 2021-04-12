@@ -77,3 +77,6 @@ add_executable(quickjs src/qjs.c
         ${CMAKE_CURRENT_BINARY_DIR}/repl.c)
 
 target_link_libraries(quickjs PUBLIC qjs)
+
+add_executable(run-test262 src/run-test262.c)
+target_link_libraries(run-test262 PUBLIC qjs)
