@@ -64,5 +64,16 @@ endif()
 add_executable(qjsc src/qjsc.c)
 target_link_libraries(qjsc PUBLIC qjs)
 
-add_executable(quickjs src/qjs.c src/qjscalc.c src/repl.c)
+add_custom_command(
+  OUTPUT repl.c qjscalc.c
+  COMMAND qjsc -c -o ${CMAKE_CURRENT_BINARY_DIR}/repl.c -m
+          ${CMAKE_CURRENT_SOURCE_DIR}/src/repl.js
+  COMMAND qjsc -c -o ${CMAKE_CURRENT_BINARY_DIR}/qjscalc.c -m
+          ${CMAKE_CURRENT_SOURCE_DIR}/src/qjscalc.js
+  DEPENDS qjsc)
+
+add_executable(quickjs src/qjs.c
+        ${CMAKE_CURRENT_BINARY_DIR}/qjscalc.c
+        ${CMAKE_CURRENT_BINARY_DIR}/repl.c)
+
 target_link_libraries(quickjs PUBLIC qjs)
