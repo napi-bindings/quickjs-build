@@ -1,5 +1,19 @@
 # quickjs-build changelog
 
+## 2021-04-12 Version 5.2.0, @NickNaso
+
+### Notable changes
+
+- Added executable for `run-test262`.
+- Auto source generation.
+
+### Commits
+
+* [[`105860f2d1`](https://github.com/napi-bindings/quickjs-build/commit/105860f2d1)] - Some little fixes on documentations. (NickNaso)
+* [[`3788bef240`](https://github.com/napi-bindings/quickjs-build/commit/3788bef240)] - Create LICENSE (Nicola Del Gobbo)
+* [[`fd7ca724ae`](https://github.com/napi-bindings/quickjs-build/commit/fd7ca724ae)] - Merge pull request #8 from gengjiawen/feat/test-262 (Nicola Del Gobbo)
+* [[`6614794560`](https://github.com/napi-bindings/quickjs-build/commit/6614794560)] - Merge pull request #7 from gengjiawen/feature/atuo (Nicola Del Gobbo)
+
 ## 2021-04-10 Version 5.1.0, @NickNaso
 
 ### Notable changes
@@ -8,6 +22,7 @@
 
 ### Commits
 
+* [[`0b46a3f067`](https://github.com/napi-bindings/quickjs-build/commit/0b46a3f067)] - Prepare new release 5.1.0. (NickNaso)
 * [[`c9ab43c489`](https://github.com/napi-bindings/quickjs-build/commit/c9ab43c489)] - Merge pull request #6 from gengjiawen/feat/binary (Nicola Del Gobbo)
 * [[`97fe3599bf`](https://github.com/napi-bindings/quickjs-build/commit/97fe3599bf)] - use mingw on windows (Jiawen Geng)
 * [[`c6719fecd5`](https://github.com/napi-bindings/quickjs-build/commit/c6719fecd5)] - **feat**: add quickjs and qjsc (Jiawen Geng)
