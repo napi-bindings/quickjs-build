@@ -110,6 +110,7 @@ jobs:
         cp ./build/libqjs.a ./qjs/libqjs.a
         cp ./build/qjsc ./qjs/qjsc
         cp ./build/quickjs ./qjs/quickjs
+        cp ./build/run-test262 ./qjs/run-test262
         cp -R ./include ./qjs/include
         cd ./qjs
         ${{ matrix.config.archiver }} a -tzip ../${{ matrix.config.artifact }}.zip .
