@@ -27,11 +27,21 @@ jobs:
              archiver: "7z" 
            }
          - { 
+             name: "Linux arm64", 
+             os: "ubuntu-20.04", 
+             artifact: "qjs-linux-arm64",
+             build_type: "Release",
+             generator: "Unix Makefiles",
+             cmake_extra: "-DCMAKE_TOOLCHAIN_FILE=./toolchains/linux_aarch64.cmake",
+             archiver: "7z" 
+           }
+         - { 
              name: "Ubuntu 18.04", 
              os: "ubuntu-18.04", 
              artifact: "qjs-ubuntu-18_04",
              build_type: "Release",
              generator: "Unix Makefiles", 
+             cmake_extra: "",
              archiver: "7z" 
            }
          - { 
@@ -40,6 +50,7 @@ jobs:
              artifact: "qjs-ubuntu-16_04",
              build_type: "Release",
              generator: "Unix Makefiles",
+             cmake_extra: "",
              archiver: "7z" 
            }
          - { 
@@ -48,6 +59,7 @@ jobs:
              artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
+             cmake_extra: "",
              archiver: "7z" 
            }  
     steps:
@@ -71,7 +83,7 @@ jobs:
         echo "Install for Linux ..."
         sudo apt-get update
         sudo apt-get install build-essential -y
-        sudo apt-get install cmake -y
+        sudo apt-get install g++-aarch64-linux-gnu qemu qemu-user -y
         sudo apt-get install p7zip-full -y
         gcc --version
         cmake --version
@@ -90,6 +102,7 @@ jobs:
         mkdir ./build
         cmake \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          ${{ matrix.config.cmake_extra }} \
           -G "${{ matrix.config.generator }}" \
           -S ./ \
           -B ./build
