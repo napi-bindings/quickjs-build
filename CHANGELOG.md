@@ -1,5 +1,20 @@
 # quickjs-build changelog
 
+## 2021-08-25 Version 5.3.0, @NickNaso
+
+### Notable changes
+
+- Added linux arm64 build.
+- Removed ubuntu 16.04 from CI.
+- Some minor fixes.
+
+### Commits
+
+* [[`8b10f47212`](https://github.com/napi-bindings/quickjs-build/commit/8b10f47212)] - Fixed documentation. (NickNaso)
+* [[`316368db2e`](https://github.com/napi-bindings/quickjs-build/commit/316368db2e)] - Removed ubuntu 16.04 from CI. (NickNaso)
+* [[`e0a280c34f`](https://github.com/napi-bindings/quickjs-build/commit/e0a280c34f)] - Merge pull request #10 from gengjiawen/arm64 (Nicola Del Gobbo)
+* [[`6551f61377`](https://github.com/napi-bindings/quickjs-build/commit/6551f61377)] - **feat**: add linux arm64 build (Jiawen Geng)
+
 ## 2021-04-12 Version 5.2.0, @NickNaso
 
 ### Notable changes
