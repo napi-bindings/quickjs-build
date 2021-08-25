@@ -54,7 +54,7 @@ On release you can find the build for the following operating systems:
 - **Windows**
 - **Ubuntu 20.04**
 - **Ubuntu 18.04**
-- **Ubuntu 16.04**
+- **Linux arm64**
 - **macOS**
 
 If you want to build the QuickJS library on your own the first step is to clone
@@ -103,7 +103,6 @@ You will need to install **C / C++** compiler and **CMake**.
 
 These steps were tested on:
 
-- **Ubuntu 16.04**
 - **Ubuntu 18.04**
 - **Ubuntu 20.04**
 
