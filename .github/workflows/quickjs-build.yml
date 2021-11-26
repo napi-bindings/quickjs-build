@@ -56,10 +56,10 @@ jobs:
          - { 
              name: "macOS-amr64", 
              os: "macos-11", 
-             artifact: "qjs-macOS",
+             artifact: "qjs-macOS-arm64",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cmake_extra: "",
+             cmake_extra: "-DCMAKE_REQUIRED_LINK_OPTIONS=-arch;arm64",
              archiver: "7z" 
            } 
     steps:
@@ -95,6 +95,11 @@ jobs:
         brew install p7zip cmake
         cmake --version
         make --version
+    - name: Prepare for building on macOS arm64
+      if: matrix.config.name == 'macOS-amr64'
+      run: |
+        sudo xcode-select -s "/Applications/Xcode_12.4.app"
+        sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/*
     - name: Configure on Unix system
       if: startsWith(matrix.config.os, 'macos') || startsWith(matrix.config.os, 'ubuntu')
       shell: bash
