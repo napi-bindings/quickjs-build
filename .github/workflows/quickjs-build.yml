@@ -9,50 +9,59 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-       config: 
-         - { 
-             name: "Windows", 
-             os: "windows-latest", 
+       config:
+         - {
+             name: "Windows",
+             os: "windows-latest",
              artifact: "qjs-windows",
              build_type: "Release",
              generator: "MinGW Makefiles",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Ubuntu 20.04", 
-             os: "ubuntu-20.04", 
+         - {
+             name: "Ubuntu 20.04",
+             os: "ubuntu-20.04",
              artifact: "qjs-ubuntu-20_04",
              build_type: "Release",
              generator: "Unix Makefiles",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Linux arm64", 
-             os: "ubuntu-20.04", 
+         - {
+             name: "Linux arm64",
+             os: "ubuntu-20.04",
              artifact: "qjs-linux-arm64",
              build_type: "Release",
              generator: "Unix Makefiles",
              cmake_extra: "-DCMAKE_TOOLCHAIN_FILE=./toolchains/linux_aarch64.cmake",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Ubuntu 18.04", 
-             os: "ubuntu-18.04", 
+         - {
+             name: "Ubuntu 18.04",
+             os: "ubuntu-18.04",
              artifact: "qjs-ubuntu-18_04",
              build_type: "Release",
-             generator: "Unix Makefiles", 
+             generator: "Unix Makefiles",
              cmake_extra: "",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "macOS", 
-             os: "macos-latest", 
+         - {
+             name: "macOS",
+             os: "macos-latest",
              artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
              cmake_extra: "",
-             archiver: "7z" 
-           }  
+             archiver: "7z"
+           },
+         - {
+             name: "macOS-arm64",
+             os: "macos-latest",
+             artifact: "qjs-macOS-arm64",
+             build_type: "Release",
+             generator: "Unix Makefiles",
+             cmake_extra: "",
+             archiver: "7z"
+           },
     steps:
     - uses: actions/checkout@v2
     - name: Print environment
@@ -93,6 +102,18 @@ jobs:
         mkdir ./build
         cmake \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          ${{ matrix.config.cmake_extra }} \
+          -G "${{ matrix.config.generator }}" \
+          -S ./ \
+          -B ./build
+     - name: Configure on macOS arm64
+      if: startsWith(matrix.config.os, 'macos') && matrix.config.name === 'macOS-arm64')
+      shell: bash
+      run: |
+        mkdir ./build
+        cmake \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          -DCMAKE_OSX_ARCHITECTURES=arm64 \
           ${{ matrix.config.cmake_extra }} \
           -G "${{ matrix.config.generator }}" \
           -S ./ \
