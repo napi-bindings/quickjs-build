@@ -52,7 +52,7 @@ jobs:
              generator: "Unix Makefiles",
              cmake_extra: "",
              archiver: "7z" 
-           },
+           }
          - { 
              name: "macOS-amr64", 
              os: "macos-latest", 
@@ -61,7 +61,7 @@ jobs:
              generator: "Unix Makefiles",
              cmake_extra: "-DCMAKE_OSX_ARCHITECTURES=arm64",
              archiver: "7z" 
-           }  
+           } 
     steps:
     - uses: actions/checkout@v2
     - name: Print environment
