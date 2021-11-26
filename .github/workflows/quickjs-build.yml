@@ -55,7 +55,7 @@ jobs:
            }
          - { 
              name: "macOS-amr64", 
-             os: "macos-latest", 
+             os: "macos-11", 
              artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
