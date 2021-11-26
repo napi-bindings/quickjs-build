@@ -59,7 +59,7 @@ jobs:
              artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
-             cmake_extra: "-DCMAKE_OSX_ARCHITECTURES=arm64",
+             cmake_extra: "-DCMAKE_REQUIRED_LINK_OPTIONS=-arch;x86_64",
              archiver: "7z" 
            } 
     steps:
