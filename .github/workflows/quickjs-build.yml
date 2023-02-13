@@ -9,50 +9,50 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-       config: 
-         - { 
-             name: "Windows", 
-             os: "windows-latest", 
+       config:
+         - {
+             name: "Windows",
+             os: "windows-latest",
              artifact: "qjs-windows",
              build_type: "Release",
              generator: "MinGW Makefiles",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Ubuntu 20.04", 
-             os: "ubuntu-20.04", 
+         - {
+             name: "Ubuntu 20.04",
+             os: "ubuntu-20.04",
              artifact: "qjs-ubuntu-20_04",
              build_type: "Release",
              generator: "Unix Makefiles",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Linux arm64", 
-             os: "ubuntu-20.04", 
+         - {
+             name: "Linux arm64",
+             os: "ubuntu-20.04",
              artifact: "qjs-linux-arm64",
              build_type: "Release",
              generator: "Unix Makefiles",
              cmake_extra: "-DCMAKE_TOOLCHAIN_FILE=./toolchains/linux_aarch64.cmake",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "Ubuntu 18.04", 
-             os: "ubuntu-18.04", 
+         - {
+             name: "Ubuntu 18.04",
+             os: "ubuntu-18.04",
              artifact: "qjs-ubuntu-18_04",
              build_type: "Release",
-             generator: "Unix Makefiles", 
+             generator: "Unix Makefiles",
              cmake_extra: "",
-             archiver: "7z" 
+             archiver: "7z"
            }
-         - { 
-             name: "macOS", 
-             os: "macos-latest", 
+         - {
+             name: "macOS",
+             os: "macos-latest",
              artifact: "qjs-macOS",
              build_type: "Release",
              generator: "Unix Makefiles",
              cmake_extra: "",
-             archiver: "7z" 
-           }  
+             archiver: "7z"
+           }
     steps:
     - uses: actions/checkout@v2
     - name: Print environment
@@ -102,7 +102,8 @@ jobs:
       shell: cmd
       run: |
         mkdir ./build
-        set PATH=C:\msys64\mingw64\bin
+        setx PATH "%PATH%;C:\msys64\mingw64\bin"
+        npx envinfo
         cmake -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -S ./ -B ./build
     - name: Build
       shell: bash
