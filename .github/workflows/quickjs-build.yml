@@ -103,7 +103,6 @@ jobs:
       run: |
         mkdir ./build
         setx PATH "%PATH%;C:\msys64\mingw64\bin"
-        npx envinfo
         cmake -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -S ./ -B ./build
     - name: Build
       shell: bash
