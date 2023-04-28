@@ -1,5 +1,20 @@
 # quickjs-build changelog
 
+## 2023-04-28 Version 6.0.0, @NickNaso
+
+### Notable changes
+
+* Update QuickJS to version 2022-03-07.
+* Fixed error build for Windows.
+
+### Commits
+
+* \[[`b28783c9be`](https://github.com/nodejs/node/commit/b28783c9be)] - Merge pull request #14 from gengjiawen/feat/bump (Nicola Del Gobbo)
+* \[[`c7cf621319`](https://github.com/nodejs/node/commit/c7cf621319)] - update README (Jiawen Geng)
+* \[[`720973720f`](https://github.com/nodejs/node/commit/720973720f)] - Update quickjs-build.yml (Jiawen Geng)
+* \[[`bc86489e59`](https://github.com/nodejs/node/commit/bc86489e59)] - **fix**: windows (gengjiawen)
+* \[[`fc4f6fc14b`](https://github.com/nodejs/node/commit/fc4f6fc14b)] - **feat**: sync quickjs to 20220307 (gengjiawen)
+
 ## 2021-08-25 Version 5.3.0, @NickNaso
 
 ### Notable changes
@@ -19,8 +34,8 @@
 
 ### Notable changes
 
-- Added executable for `run-test262`.
-- Auto source generation.
+* Added executable for `run-test262`.
+* Auto source generation.
 
 ### Commits
 
@@ -33,7 +48,7 @@
 
 ### Notable changes
 
-- Added executable for `quickjs` and `qjsc`.
+* Added executable for `quickjs` and `qjsc`.
 
 ### Commits
 
@@ -46,15 +61,15 @@
 
 ### Notable changes
 
-- Fixed the build on *nix systems.
-- QuickJS version 2021-03-27.
+* Fixed the build on *nix systems.
+* QuickJS version 2021-03-27.
 
 ### QuickJS changes:
 
-- Faster Array.prototype.push and Array.prototype.unshift.
-- Added JS_UpdateStackTop().
-- Fixed Windows console.
-- Misc bug fixes.
+* Faster Array.prototype.push and Array.prototype.unshift.
+* Added JS_UpdateStackTop().
+* Fixed Windows console.
+* Misc bug fixes.
 
 ### Commits
 
@@ -70,10 +85,10 @@
 
 ### QuickJS changes
 
-- Improved function parameter initializers.
-- Added `std.setenv()`, `std.unsetenv()` and `std.getenviron()`.
-- Added JS_EvalThis().
-- Misc bug fixes.
+* Improved function parameter initializers.
+* Added `std.setenv()`, `std.unsetenv()` and `std.getenviron()`.
+* Added JS_EvalThis().
+* Misc bug fixes.
 
 ### Commits
 
@@ -83,17 +98,17 @@
 
 ### Notable changes
 
-- Update the assets for the release only when the release has been published.
-- QuickJS version 2020-09-06.
+* Update the assets for the release only when the release has been published.
+* QuickJS version 2020-09-06.
 
 ### QuickJS changes
 
-- Added logical assignment operators.
-- Added IsHTMLDDA support.
-- Faster for-of loops.
-- os.Worker now takes a module filename as parameter.
-- qjsc: added -D option to compile dynamically loaded modules or workers.
-- Misc bug fixes.
+* Added logical assignment operators.
+* Added IsHTMLDDA support.
+* Faster for-of loops.
+* os.Worker now takes a module filename as parameter.
+* qjsc: added -D option to compile dynamically loaded modules or workers.
+* Misc bug fixes.
 
 ### Commits
 
@@ -104,16 +119,16 @@
 
 ### Notable changes
 
-- QuickJS version 2020-07-05.
+* QuickJS version 2020-07-05.
 
 ### QuickJS changes
 
-- Modified JS_GetPrototype() to return a live value.
-- REPL: support unicode characters larger than 16 bits.
-- Added os.Worker.
-- Improved object serialization.
-- Added std.parseExtJSON.
-- Misc bug fixes.
+* Modified JS_GetPrototype() to return a live value.
+* REPL: support unicode characters larger than 16 bits.
+* Added os.Worker.
+* Improved object serialization.
+* Added std.parseExtJSON.
+* Misc bug fixes.
 
 ### Commits
 
@@ -123,8 +138,8 @@
 
 ### Notable changes
 
-- Initial implementation for the project.
-- QuickJS version 2020-07-05.
+* Initial implementation for the project.
+* QuickJS version 2020-07-05.
 
 ### Commits
 
