@@ -1,5 +1,72 @@
 # quickjs-build changelog
 
+## Unreleased Version 7.0.0, @NickNaso
+
+### Notable changes
+
+* Update QuickJS to version 2026-06-04. The engine now supports most of ES2025:
+  top-level await, WeakRef and FinalizationRegistry, iterator helpers, the Set
+  methods, resizable ArrayBuffer, the RegExp `v` flag and modifiers,
+  Float16Array, JSON modules with import attributes, `Promise.try`,
+  `Math.sumPrecise` and more.
+* The release archives are cross-compiled with `zig cc` from one Linux runner:
+  13 native platforms instead of 5, plus WebAssembly (`wasm32-wasi` and
+  `wasm32-emscripten`, engine only).
+* The Linux archives no longer depend on the Ubuntu version of the CI runner:
+  they need glibc 2.17 or later (2.27 for RISC-V). Static musl builds are also
+  provided.
+* New CMake options `QJS_BUILD_LIBC`, `QJS_BUILD_TOOLS`, `QJS_BUILD_SMOKE_TEST`
+  and `QJSC_EXECUTABLE`; new `check` target that runs the QuickJS tests.
+* New CMake toolchain file `toolchains/zig.cmake` and build script
+  `scripts/build.sh`. `toolchains/linux_aarch64.cmake` and the dependency on
+  qemu to build for arm64 were removed.
+* The CI runs the tests on Linux x86_64, x86, arm64, armv7 and riscv64 and on
+  real Windows and macOS runners, and publishes a `SHA256SUMS` file with every
+  release.
+
+### Breaking changes
+
+#### QuickJS API
+
+* The mathematical extensions were removed upstream: `CONFIG_BIGNUM`,
+  `libbf`, `qjscalc`, BigFloat, BigDecimal and operator overloading are gone,
+  together with `JS_AddIntrinsicBigFloat`, `JS_AddIntrinsicBigDecimal`,
+  `JS_AddIntrinsicOperators`, `JS_EnableBignumExt`, `JS_IsBigFloat` and
+  `JS_IsBigDecimal`. BigInt is always available and `JS_AddIntrinsicBigInt`
+  no longer exists.
+* `JS_EVAL_FLAG_STRIP` was removed: use `JS_SetStripInfo`.
+* `JS_ResetUncatchableError` was removed: use `JS_SetUncatchableException`.
+* `JS_RunModule` was removed: use `JS_LoadModule`.
+* `JS_PROP_NO_ADD`, `JS_VALUE_GET_OBJ` and `JS_VALUE_GET_STRING` were removed
+  from `quickjs.h`.
+* `JS_SetPropertyInternal` has an additional `this_obj` parameter.
+* `js_module_loader` (`quickjs-libc.h`) has an additional
+  `JSValueConst attributes` parameter.
+* The `JS_AddIntrinsic*` functions, `JS_SetConstructor` and
+  `JS_SetPropertyFunctionList` now return `int` instead of `void`.
+
+#### Archives
+
+* The archives were renamed:
+
+  | 6.0.0 | 7.0.0 |
+  | --- | --- |
+  | `qjs-windows.zip` | `qjs-windows-x86_64.zip` |
+  | `qjs-ubuntu-18_04.zip`, `qjs-ubuntu-20_04.zip` | `qjs-linux-x86_64.zip` |
+  | `qjs-linux-arm64.zip` | `qjs-linux-arm64.zip` |
+  | `qjs-macOS.zip` | `qjs-macos-x86_64.zip`, `qjs-macos-arm64.zip` |
+
+* The Windows archives are built against the UCRT with a recent MinGW-w64.
+  Old MinGW-w64 toolchains cannot link `libqjs.a` (undefined references to
+  `pthread_cond_timedwait64` and `clock_gettime64`).
+* Every archive now contains `VERSION` and the QuickJS `LICENSE`.
+
+#### Build
+
+* CMake 3.20 or later is required.
+* `CONFIG_BIGNUM` is no longer defined for the users of the `qjs` target.
+* Cross-compiling the tools requires `-DQJSC_EXECUTABLE=<host qjsc>`.
+
 ## 2023-04-28 Version 6.0.0, @NickNaso
 
 ### Notable changes

@@ -1,135 +1,242 @@
 name: QuickJS Build Matrix
 
-on: [push, pull_request, release]
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
 
 jobs:
+  # ----------------------------------------------------------------------------
+  # Cross-compile every native target and wasm32-wasi from one Linux runner
+  # with `zig cc` (see scripts/build.sh and toolchains/zig.cmake).
+  # ----------------------------------------------------------------------------
   build:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-       config:
-         - {
-             name: "Windows",
-             os: "windows-latest",
-             artifact: "qjs-windows",
-             build_type: "Release",
-             generator: "MinGW Makefiles",
-             archiver: "7z"
-           }
-         - {
-             name: "Ubuntu 20.04",
-             os: "ubuntu-20.04",
-             artifact: "qjs-ubuntu-20_04",
-             build_type: "Release",
-             generator: "Unix Makefiles",
-             archiver: "7z"
-           }
-         - {
-             name: "Linux arm64",
-             os: "ubuntu-20.04",
-             artifact: "qjs-linux-arm64",
-             build_type: "Release",
-             generator: "Unix Makefiles",
-             cmake_extra: "-DCMAKE_TOOLCHAIN_FILE=./toolchains/linux_aarch64.cmake",
-             archiver: "7z"
-           }
-         - {
-             name: "Ubuntu 18.04",
-             os: "ubuntu-18.04",
-             artifact: "qjs-ubuntu-18_04",
-             build_type: "Release",
-             generator: "Unix Makefiles",
-             cmake_extra: "",
-             archiver: "7z"
-           }
-         - {
-             name: "macOS",
-             os: "macos-latest",
-             artifact: "qjs-macOS",
-             build_type: "Release",
-             generator: "Unix Makefiles",
-             cmake_extra: "",
-             archiver: "7z"
-           }
+        include:
+          # name:     release artifact, see `scripts/build.sh --list`
+          # test:     run the test suite on this runner (natively or emulated)
+          # packages: apt packages needed to run the binaries
+          # emulator: CMAKE_CROSSCOMPILING_EMULATOR used by ctest
+          - name: linux-x86_64
+            test: true
+          - name: linux-arm64
+            test: true
+            packages: qemu-user libc6-arm64-cross
+            emulator: qemu-aarch64;-L;/usr/aarch64-linux-gnu
+          - name: linux-armv7
+            test: true
+            packages: qemu-user libc6-armhf-cross
+            emulator: qemu-arm;-L;/usr/arm-linux-gnueabihf
+            # qemu-user cannot hand the 64-bit directory offsets of ext4 to a
+            # 32-bit readdir(): os.readdir() fails with EOVERFLOW under
+            # emulation only (the test passes on tmpfs and on real hardware).
+            ctest_args: -E test_std
+          - name: linux-riscv64
+            test: true
+            packages: qemu-user libc6-riscv64-cross
+            emulator: qemu-riscv64;-L;/usr/riscv64-linux-gnu
+          - name: linux-x86
+            test: true
+            packages: libc6-i386
+          - name: linux-x86_64-musl
+            test: true
+          - name: linux-arm64-musl
+            test: true
+            packages: qemu-user
+            emulator: qemu-aarch64
+          # Windows and macOS binaries are executed by the `smoke` job below.
+          - name: windows-x86_64
+          - name: windows-arm64
+          - name: windows-x86
+          - name: macos-x86_64
+          - name: macos-arm64
+          # Built and linked only: no hosted runner can execute it.
+          - name: freebsd-x86_64
+          # The embedding smoke test runs with the WASI support of Node.js.
+          - name: wasm32-wasi
+            test: true
     steps:
-    - uses: actions/checkout@v2
-    - name: Print environment
-      run: |
-        echo "Name: ${{ matrix.config.name }}"
-        echo "OS: ${{ matrix.config.os }}"
-        echo "Generator: ${{ matrix.config.generator }}"
-        echo "Archiver: ${{ matrix.config.archiver }}"
-        echo "Artifact: ${{ matrix.config.artifact }}"
-    - name: Install dependencies on Windows
-      if: startsWith(matrix.config.os, 'windows')
-      run: |
-        echo "Install for windows ..."
-        cmake --version
-        ${{ matrix.config.archiver }}
-    - name: Install dependencies on Linux
-      if: startsWith(matrix.config.os, 'ubuntu')
-      run: |
-        echo "Install for Linux ..."
-        sudo apt-get update
-        sudo apt-get install build-essential -y
-        sudo apt-get install g++-aarch64-linux-gnu qemu qemu-user -y
-        sudo apt-get install p7zip-full -y
-        gcc --version
-        cmake --version
-        make --version
-    - name: Install dependencies on macOS
-      if: startsWith(matrix.config.os, 'macos')
-      run: |
-        echo "Install for macOs ..."
-        brew install p7zip cmake
-        cmake --version
-        make --version
-    - name: Configure on Unix system
-      if: startsWith(matrix.config.os, 'macos') || startsWith(matrix.config.os, 'ubuntu')
-      shell: bash
-      run: |
-        mkdir ./build
-        cmake \
-          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-          ${{ matrix.config.cmake_extra }} \
-          -G "${{ matrix.config.generator }}" \
-          -S ./ \
-          -B ./build
-    - name: Configure on Windows
-      if: startsWith(matrix.config.os, 'windows')
-      shell: cmd
-      run: |
-        mkdir ./build
-        setx PATH "%PATH%;C:\msys64\mingw64\bin"
-        cmake -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -S ./ -B ./build
-    - name: Build
-      shell: bash
-      run: cmake --build ./build --config ${{ matrix.config.build_type }}
-    - name: "Prepare"
-      shell: bash
-      run: |
-        mkdir ./qjs
-        cp ./build/libqjs.a ./qjs/libqjs.a
-        cp ./build/qjsc ./qjs/qjsc
-        cp ./build/quickjs ./qjs/quickjs
-        cp ./build/run-test262 ./qjs/run-test262
-        cp -R ./include ./qjs/include
-        cd ./qjs
-        ${{ matrix.config.archiver }} a -tzip ../${{ matrix.config.artifact }}.zip .
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        path: ./${{ matrix.config.artifact }}.zip
-        name: ${{ matrix.config.artifact }}
-    - name: Release
-      if: github.event_name == 'release' && (github.event.action == 'published')
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.config.artifact }}.zip
-          asset_name: ${{ matrix.config.artifact }}.zip
-          asset_content_type: application/zip
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+      - name: Install zig
+        run: |
+          python -m pip install "ziglang==$(cat .zigversion)"
+          mkdir -p "$RUNNER_TEMP/bin"
+          printf '#!/bin/sh\nexec "%s" -m ziglang "$@"\n' "$(command -v python)" > "$RUNNER_TEMP/bin/zig"
+          chmod +x "$RUNNER_TEMP/bin/zig"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - name: Install the emulator
+        if: matrix.packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ matrix.packages }}
+      - name: Build
+        env:
+          QJS_EMULATOR: ${{ matrix.emulator }}
+          QJS_CTEST_ARGS: ${{ matrix.ctest_args }}
+        run: |
+          zig version
+          sh scripts/build.sh ${{ matrix.test && '--test' || '' }} ${{ matrix.name }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: qjs-${{ matrix.name }}
+          path: dist/qjs-${{ matrix.name }}.zip
+          if-no-files-found: error
+
+  # ----------------------------------------------------------------------------
+  # Emscripten is built with its own SDK: zig does not ship its sysroot.
+  # ----------------------------------------------------------------------------
+  emscripten:
+    name: wasm32-emscripten
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: mymindstorm/setup-emsdk@v16
+      - name: Build
+        run: |
+          emcc --version
+          sh scripts/build.sh --test wasm32-emscripten
+      - uses: actions/upload-artifact@v7
+        with:
+          name: qjs-wasm32-emscripten
+          path: dist/qjs-wasm32-emscripten.zip
+          if-no-files-found: error
+
+  # ----------------------------------------------------------------------------
+  # Run the cross-compiled binaries on real machines and link the static
+  # library with the compiler of the platform, as a user of the archive would.
+  # ----------------------------------------------------------------------------
+  smoke:
+    name: run ${{ matrix.artifact }}
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - artifact: linux-x86_64
+            os: ubuntu-24.04
+            cc: gcc
+            libs: -lm -lpthread -ldl
+          - artifact: macos-arm64
+            os: macos-latest
+            cc: cc
+            libs: -lm -lpthread
+          - artifact: macos-x86_64
+            os: macos-15-intel
+            cc: cc
+            libs: -lm -lpthread
+          - artifact: windows-x86_64
+            os: windows-latest
+          - artifact: windows-x86
+            os: windows-latest
+          - artifact: windows-arm64
+            os: windows-11-arm
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: qjs-${{ matrix.artifact }}
+          path: dist
+      - name: Unpack
+        run: |
+          mkdir pkg
+          cd pkg
+          unzip -q ../dist/qjs-${{ matrix.artifact }}.zip
+          ls -l
+      - name: Run the QuickJS tests
+        run: |
+          for t in test_closure test_language test_loop test_bigint test_cyclic_import test_worker; do
+            echo "== $t"
+            pkg/quickjs "tests/$t.js"
+          done
+          echo "== test_builtin"
+          pkg/quickjs --std tests/test_builtin.js
+          if [ "$RUNNER_OS" != "Windows" ]; then
+            echo "== test_std"
+            pkg/quickjs tests/test_std.js
+            echo "== test_rw_handler"
+            pkg/quickjs tests/test_rw_handler.js
+          fi
+      - name: Link the library with the system compiler
+        if: matrix.cc
+        run: |
+          ${{ matrix.cc }} -O2 -Ipkg/include smoke/embed.c pkg/libqjs.a ${{ matrix.libs }} -o embed
+          ./embed
+
+  # ----------------------------------------------------------------------------
+  # The Windows library is built against the UCRT with a recent mingw-w64.
+  # UCRT64 is the supported way to link it. MINGW64 (legacy msvcrt runtime) is
+  # reported for information only.
+  # ----------------------------------------------------------------------------
+  windows-link:
+    name: link windows-x86_64 with MSYS2 ${{ matrix.msystem }}
+    needs: build
+    runs-on: windows-latest
+    continue-on-error: ${{ matrix.msystem == 'MINGW64' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - msystem: UCRT64
+            package: mingw-w64-ucrt-x86_64-gcc
+          - msystem: MINGW64
+            package: mingw-w64-x86_64-gcc
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: ${{ matrix.package }} unzip
+      - uses: actions/download-artifact@v8
+        with:
+          name: qjs-windows-x86_64
+          path: dist
+      - name: Link and run
+        run: |
+          mkdir pkg
+          (cd pkg && unzip -q ../dist/qjs-windows-x86_64.zip)
+          gcc --version
+          gcc -O2 -Ipkg/include smoke/embed.c pkg/libqjs.a -lm -lpthread -static -o embed.exe
+          ./embed.exe
+
+  # ----------------------------------------------------------------------------
+  # Attach the archives and their checksums to a published release.
+  # ----------------------------------------------------------------------------
+  release:
+    name: Upload release assets
+    if: github.event_name == 'release'
+    needs: [build, emscripten, smoke, windows-link]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: qjs-*
+          path: dist
+          merge-multiple: true
+      - name: Checksums
+        working-directory: dist
+        run: sha256sum qjs-*.zip | tee SHA256SUMS
+      - name: Upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$TAG" dist/qjs-*.zip dist/SHA256SUMS --repo "$GITHUB_REPOSITORY" --clobber

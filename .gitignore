@@ -12,5 +12,6 @@ _deps
 .vscode
 .idea
 build
+dist
 .DS_Store
 cmake-build-debug/

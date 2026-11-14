@@ -1,0 +1,10 @@
+# The vendored QuickJS files stay byte-identical to the upstream tarball on
+# every platform, so they can be verified against it.
+src/** text eol=lf
+include/** text eol=lf
+tests/** text eol=lf
+VERSION text eol=lf
+LICENSE.quickjs text eol=lf
+
+# Scripts run by sh need LF line endings even in a Windows checkout.
+*.sh text eol=lf
