@@ -1,6 +1,6 @@
 # quickjs-build changelog
 
-## Unreleased Version 7.0.0, @NickNaso
+## 2026-11-15 Version 7.0.0, @NickNaso
 
 ### Notable changes
 

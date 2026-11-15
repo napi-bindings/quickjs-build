@@ -136,8 +136,14 @@ for name in $names; do
     wasm32-wasi)
       set -- "$@" -DCMAKE_TOOLCHAIN_FILE="$ROOT/toolchains/zig.cmake" \
         -DZIG_TARGET="$zig_target"
-      if [ -z "$emulator" ] && command -v node >/dev/null 2>&1; then
-        emulator="node;--no-warnings;$ROOT/smoke/run-wasi.mjs"
+      if [ -z "$emulator" ]; then
+        if command -v node >/dev/null 2>&1; then
+          emulator="node;--no-warnings;$ROOT/smoke/run-wasi.mjs"
+        elif [ "$run_tests" = 1 ]; then
+          echo "--test $name needs a WASI runtime: install Node.js or set" \
+            "QJS_EMULATOR (e.g. \"wasmtime\")" >&2
+          exit 1
+        fi
       fi
       ;;
     *)
