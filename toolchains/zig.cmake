@@ -61,13 +61,12 @@ set(CMAKE_SYSTEM_PROCESSOR "${_zig_arch}")
 
 # `zig cc`, `zig ar` and `zig ranlib` are sub-commands of one executable. CMake
 # accepts a compiler with mandatory arguments as a list; the archiver is set
-# through the rule variables so that no wrapper script is needed.
+# through the rule variables so that no wrapper script is needed. The rules
+# live in zig-rules.cmake, which CMake reads after its platform files: set
+# here, they would be overwritten for Windows targets (see that file).
 set(CMAKE_C_COMPILER "${ZIG}" cc)
 set(CMAKE_C_COMPILER_TARGET "${ZIG_TARGET}")
-
-set(CMAKE_C_ARCHIVE_CREATE "\"${ZIG}\" ar qc <TARGET> <LINK_FLAGS> <OBJECTS>")
-set(CMAKE_C_ARCHIVE_APPEND "\"${ZIG}\" ar q <TARGET> <LINK_FLAGS> <OBJECTS>")
-set(CMAKE_C_ARCHIVE_FINISH "\"${ZIG}\" ranlib <TARGET>")
+set(CMAKE_USER_MAKE_RULES_OVERRIDE_C "${CMAKE_CURRENT_LIST_DIR}/zig-rules.cmake")
 
 # Headers and libraries come from zig, never from the build machine.
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
