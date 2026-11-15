@@ -67,6 +67,8 @@ following archives, together with a `SHA256SUMS` file:
 | `qjs-windows-x86_64.zip` | Windows x86_64 | MinGW-w64 ABI, UCRT |
 | `qjs-windows-arm64.zip` | Windows ARM64 | MinGW-w64 ABI, UCRT |
 | `qjs-windows-x86.zip` | Windows x86 32 bit | MinGW-w64 ABI, UCRT |
+| `qjs-windows-x86_64-mingw.zip` | Windows x86_64 | built with MinGW-w64 11 (GCC 13.2), msvcrt |
+| `qjs-windows-x86-mingw.zip` | Windows x86 32 bit | built with MinGW-w64 11 (GCC 13.2), msvcrt |
 | `qjs-macos-x86_64.zip` | macOS Intel | macOS 11 or later |
 | `qjs-macos-arm64.zip` | macOS Apple Silicon | macOS 11 or later |
 | `qjs-freebsd-x86_64.zip` | FreeBSD x86_64 | FreeBSD 14 or later |
@@ -85,9 +87,12 @@ The native archives contain:
 The WebAssembly archives contain `libqjs.a` with the engine only, `include/`,
 `VERSION` and `LICENSE`.
 
-All the archives except `qjs-wasm32-emscripten.zip` are cross-compiled from Linux
-with [`zig cc`](https://ziglang.org/) at the version stored in
-[`.zigversion`](.zigversion).
+The archives are cross-compiled from Linux with [`zig cc`](https://ziglang.org/)
+at the version stored in [`.zigversion`](.zigversion), except
+`qjs-wasm32-emscripten.zip` (Emscripten SDK) and the two `-mingw` archives, built
+natively on Windows with the
+[MinGW-Builds](https://github.com/niXman/mingw-builds-binaries) toolchain
+`13.2.0-rt_v11-rev1`.
 
 ## Using the library
 
@@ -106,13 +111,21 @@ and runs it wherever the binaries can be executed.
 
 Notes for Windows:
 
-- The library follows the **MinGW-w64** ABI and is built against the **UCRT**.
-  Link it with a recent MinGW-w64 toolchain such as
-  [MSYS2 UCRT64](https://www.msys2.org/docs/environments/),
-  [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) or `zig cc`.
-- Old MinGW-w64 releases fail to link it with undefined references to
-  `pthread_cond_timedwait64` and `clock_gettime64`. Update the toolchain or
-  build the library with your own compiler (see [Building](#building)).
+- Two flavours of the Windows archives are provided. Pick the one that matches
+  the toolchain you link with:
+
+  | Your toolchain | Archive |
+  | --- | --- |
+  | MinGW-w64 12 or later with the UCRT: [MSYS2 UCRT64](https://www.msys2.org/docs/environments/), [llvm-mingw](https://github.com/mstorsjo/llvm-mingw), `zig cc` | `qjs-windows-x86_64.zip`, `qjs-windows-x86.zip`, `qjs-windows-arm64.zip` |
+  | MinGW-w64 with the msvcrt runtime, including releases before 12: MSYS2 MINGW64, MinGW-Builds, Debian and Ubuntu `gcc-mingw-w64` | `qjs-windows-x86_64-mingw.zip`, `qjs-windows-x86-mingw.zip` |
+
+- MinGW-w64 12 moved winpthreads to 64-bit `time_t` symbols: code compiled with
+  its headers references `clock_gettime64` and `pthread_cond_timedwait64`, which
+  older releases do not have. Linking the zig archives with an older MinGW-w64
+  fails with undefined references to these two functions. The `-mingw` archives
+  are compiled with MinGW-w64 11 and reference the classic names instead.
+- Do not mix C runtimes: link the UCRT archives into UCRT programs and the
+  `-mingw` (msvcrt) archives into msvcrt programs.
 - Microsoft Visual C++ is not supported by QuickJS.
 
 You can also add this repository to a **CMake** project and let it build the

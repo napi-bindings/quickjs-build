@@ -113,6 +113,71 @@ jobs:
           if-no-files-found: error
 
   # ----------------------------------------------------------------------------
+  # Alternative Windows archives built natively with MinGW-w64 11 (GCC 13.2,
+  # msvcrt), for MinGW toolchains that cannot link the zig archives.
+  #
+  # MinGW-w64 12 changed winpthreads to 64-bit time_t symbols: code compiled
+  # with its headers references clock_gettime64 and pthread_cond_timedwait64,
+  # which older MinGW-w64 releases do not have. The zig archives (and anything
+  # built with a current MSYS2) are on the new side of that change. These ones
+  # are built with a pinned pre-12 toolchain so they link with older MinGW-w64
+  # releases too; the windows-link job checks them with a current MSYS2.
+  # ----------------------------------------------------------------------------
+  mingw:
+    name: ${{ matrix.name }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x86_64-mingw
+            toolchain: x86_64-13.2.0-release-posix-seh-msvcrt-rt_v11-rev1.7z
+            sha256: 7d3f84b17b235aa233f0fb5df9765bf79dbea950177a69ff99f8ad1d75b0aa6e
+            root: mingw64
+          - name: windows-x86-mingw
+            toolchain: i686-13.2.0-release-posix-dwarf-msvcrt-rt_v11-rev1.7z
+            sha256: 90674ea38155173c9952e69efe59809be6379f0f610cac5a6ad207161bd10025
+            root: mingw32
+    env:
+      MINGW_BUILDS_URL: https://github.com/niXman/mingw-builds-binaries/releases/download/13.2.0-rt_v11-rev1
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install MinGW-w64
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl -fsSL -o mingw.7z "$MINGW_BUILDS_URL/${{ matrix.toolchain }}"
+          echo "${{ matrix.sha256 }}  mingw.7z" | sha256sum -c -
+          7z x -y -bd mingw.7z > /dev/null
+          bin=$(cygpath -w "$PWD/${{ matrix.root }}/bin")
+          echo "$bin" >> "$GITHUB_PATH"
+          echo "MINGW_BIN=$bin" >> "$GITHUB_ENV"
+      - name: Build and test
+        run: |
+          "$MINGW_BIN/gcc.exe" --version
+          cmake -G "MinGW Makefiles" -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER="$MINGW_BIN/gcc.exe" \
+            -DCMAKE_MAKE_PROGRAM="$MINGW_BIN/mingw32-make.exe" \
+            -DQJS_BUILD_SMOKE_TEST=ON
+          cmake --build build --parallel
+          ctest --test-dir build --output-on-failure
+      - name: Package
+        run: |
+          mkdir -p pkg dist
+          cp build/libqjs.a build/qjsc.exe build/quickjs.exe build/run-test262.exe pkg/
+          cp -R include pkg/include
+          cp VERSION pkg/VERSION
+          cp LICENSE.quickjs pkg/LICENSE
+          (cd pkg && cmake -E tar cf ../dist/qjs-${{ matrix.name }}.zip --format=zip -- *)
+      - uses: actions/upload-artifact@v7
+        with:
+          name: qjs-${{ matrix.name }}
+          path: dist/qjs-${{ matrix.name }}.zip
+          if-no-files-found: error
+
+  # ----------------------------------------------------------------------------
   # Run the cross-compiled binaries on real machines and link the static
   # library with the compiler of the platform, as a user of the archive would.
   # ----------------------------------------------------------------------------
@@ -178,23 +243,32 @@ jobs:
           ./embed
 
   # ----------------------------------------------------------------------------
-  # The Windows library is built against the UCRT with a recent mingw-w64.
-  # UCRT64 is the supported way to link it. MINGW64 (legacy msvcrt runtime) is
-  # reported for information only.
+  # Link the Windows archives with the current MSYS2 toolchains, as a user
+  # would. windows-x86_64 (zig, UCRT) must link with UCRT64 and
+  # windows-x86_64-mingw (MinGW-w64 11, msvcrt) with MINGW64. The zig archive
+  # with MINGW64 mixes two C runtimes and is reported for information only.
   # ----------------------------------------------------------------------------
   windows-link:
-    name: link windows-x86_64 with MSYS2 ${{ matrix.msystem }}
-    needs: build
+    name: link ${{ matrix.artifact }} with MSYS2 ${{ matrix.msystem }}
+    needs: [build, mingw]
     runs-on: windows-latest
-    continue-on-error: ${{ matrix.msystem == 'MINGW64' }}
+    continue-on-error: ${{ matrix.optional }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - msystem: UCRT64
+          - artifact: windows-x86_64
+            msystem: UCRT64
             package: mingw-w64-ucrt-x86_64-gcc
-          - msystem: MINGW64
+            optional: false
+          - artifact: windows-x86_64
+            msystem: MINGW64
             package: mingw-w64-x86_64-gcc
+            optional: true
+          - artifact: windows-x86_64-mingw
+            msystem: MINGW64
+            package: mingw-w64-x86_64-gcc
+            optional: false
     defaults:
       run:
         shell: msys2 {0}
@@ -206,12 +280,12 @@ jobs:
           install: ${{ matrix.package }} unzip
       - uses: actions/download-artifact@v8
         with:
-          name: qjs-windows-x86_64
+          name: qjs-${{ matrix.artifact }}
           path: dist
       - name: Link and run
         run: |
           mkdir pkg
-          (cd pkg && unzip -q ../dist/qjs-windows-x86_64.zip)
+          (cd pkg && unzip -q ../dist/qjs-${{ matrix.artifact }}.zip)
           gcc --version
           gcc -O2 -Ipkg/include smoke/embed.c pkg/libqjs.a -lm -lpthread -static -o embed.exe
           ./embed.exe
@@ -222,7 +296,7 @@ jobs:
   release:
     name: Upload release assets
     if: github.event_name == 'release'
-    needs: [build, emscripten, smoke, windows-link]
+    needs: [build, emscripten, mingw, smoke, windows-link]
     runs-on: ubuntu-24.04
     permissions:
       contents: write

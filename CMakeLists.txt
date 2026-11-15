@@ -194,6 +194,9 @@ if(QJS_BUILD_SMOKE_TEST)
     set_target_properties(qjs-smoke PROPERTIES SUFFIX ".wasm")
     # 1 MiB of linear memory stack, well above the limit set in embed.c
     target_link_options(qjs-smoke PRIVATE -Wl,-z,stack-size=1048576)
+  elseif(WIN32)
+    # static linking of libwinpthread-1.dll in mingw, as for the tools
+    target_link_options(qjs-smoke PRIVATE -static)
   endif()
 endif()
 

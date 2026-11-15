@@ -12,6 +12,10 @@
 * The release archives are cross-compiled with `zig cc` from one Linux runner:
   13 native platforms instead of 5, plus WebAssembly (`wasm32-wasi` and
   `wasm32-emscripten`, engine only).
+* New `qjs-windows-x86_64-mingw.zip` and `qjs-windows-x86-mingw.zip` archives,
+  built natively on Windows with MinGW-w64 11 (MinGW-Builds GCC 13.2, msvcrt):
+  they link with MinGW-w64 toolchains that cannot link the zig archives,
+  including releases older than 12.
 * The Linux archives no longer depend on the Ubuntu version of the CI runner:
   they need glibc 2.17 or later (2.27 for RISC-V). Static musl builds are also
   provided.
@@ -56,9 +60,10 @@
   | `qjs-linux-arm64.zip` | `qjs-linux-arm64.zip` |
   | `qjs-macOS.zip` | `qjs-macos-x86_64.zip`, `qjs-macos-arm64.zip` |
 
-* The Windows archives are built against the UCRT with a recent MinGW-w64.
-  Old MinGW-w64 toolchains cannot link `libqjs.a` (undefined references to
-  `pthread_cond_timedwait64` and `clock_gettime64`).
+* The `qjs-windows-*.zip` archives are built with zig against the UCRT and a
+  recent MinGW-w64. MinGW-w64 toolchains older than 12 cannot link them
+  (undefined references to `pthread_cond_timedwait64` and `clock_gettime64`):
+  use the `qjs-windows-*-mingw.zip` archives (msvcrt) instead.
 * Every archive now contains `VERSION` and the QuickJS `LICENSE`.
 
 #### Build
